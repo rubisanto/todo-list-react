@@ -9,6 +9,27 @@ export default function Form(props) {
     { txt: "Faire la vaisselle", id: uuidv4() },
   ]);
 
+  const [stateInput, setStateInput] = useState();
+
+  const linkedInput = (e) => {
+    setStateInput(e);
+  };
+
+  const addTodo = (e) => {
+    e.preventDefault();
+    // copie du tableau, ne pas modifier le tableau d'origine
+    const newArr = [...dataArr];
+
+    const newTodo = {};
+    newTodo.txt = stateInput;
+    newTodo.id = uuidv4();
+
+    newArr.push(newTodo);
+    setDataArr(newArr);
+    // remettre l'input à vide
+    setStateInput("");
+  };
+
   const deleteElement = (id) => {
     const filteredState = dataArr.filter((item) => item.id !== id);
     setDataArr(filteredState);
@@ -16,11 +37,17 @@ export default function Form(props) {
 
   return (
     <div className="m-auto px-4 col-12 col-sm-10 col-lg-6">
-      <form className="mb-3">
+      <form onSubmit={(e) => addTodo(e)} className="mb-3">
         <label htmlFor="todo" className="form-label mt-3">
           Chose à faire
         </label>
-        <input type="text" className="form-control" id="todo" />
+        <input
+          value={stateInput}
+          onChange={(e) => linkedInput(e.target.value)}
+          type="text"
+          className="form-control"
+          id="todo"
+        />
         <button className="mt-2 btn btn-primary d-block">Envoyer</button>
       </form>
 
